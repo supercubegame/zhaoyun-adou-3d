@@ -17,18 +17,37 @@ jobs:
       - uses: actions/checkout@v5
       - name: install Blender
         run: |
+          set -euxo pipefail
           sudo apt-get update
           sudo apt-get install -y blender
+          blender --version
       - name: generate GLBs
-        run: blender --background --python tools/generate_glb.py
+        run: |
+          set -euxo pipefail
+          rm -rf assets/models
+          mkdir -p assets/models
+          blender --background --python tools/generate_glb.py 2>&1 | tee blender-glb.log
       - name: verify generated files
         run: |
+          set -euxo pipefail
           test -s assets/models/zhaoyun.glb
           test -s assets/models/adou.glb
           test -s assets/models/enemy.glb
           file assets/models/*.glb
+          sha256sum assets/models/*.glb
+      - name: upload generation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glb-generation-evidence
+          path: |
+            blender-glb.log
+            assets/models/*.glb
+          if-no-files-found: error
+          retention-days: 7
       - name: commit generated assets
         run: |
+          set -euxo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add assets/models/*.glb
