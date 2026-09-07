@@ -1,0 +1,9 @@
+{
+  "id": "enemy",
+  "name": "敌军",
+  "palette": ["#6b2f3d", "#4b4b4b"],
+  "clips": ["idle", "walk", "attack", "hit", "defeat"],
+  "format": "procedural-placeholder",
+  "source": "tools/procedural-assets.mjs",
+  "license": "project-original-placeholder"
+}

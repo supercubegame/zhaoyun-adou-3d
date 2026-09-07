@@ -1,0 +1,9 @@
+{
+  "id": "zhaoyun",
+  "name": "赵云",
+  "palette": ["#263f59", "#d1a33b"],
+  "clips": ["idle", "walk", "attack", "hit", "protect", "victory", "defeat"],
+  "format": "procedural-placeholder",
+  "source": "tools/procedural-assets.mjs",
+  "license": "project-original-placeholder"
+}

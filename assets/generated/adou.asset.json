@@ -1,0 +1,9 @@
+{
+  "id": "adou",
+  "name": "阿斗",
+  "palette": ["#3566a1", "#d1a33b"],
+  "clips": ["idle", "follow", "scared", "rescued", "defeat"],
+  "format": "procedural-placeholder",
+  "source": "tools/procedural-assets.mjs",
+  "license": "project-original-placeholder"
+}
