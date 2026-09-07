@@ -1,0 +1,37 @@
+name: generate-glb
+
+on:
+  push:
+    branches: [ci/generate-procedural-glb]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    name: generate original placeholder GLBs
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender
+      - name: generate GLBs
+        run: blender --background --python tools/generate_glb.py
+      - name: verify generated files
+        run: |
+          test -s assets/models/zhaoyun.glb
+          test -s assets/models/adou.glb
+          test -s assets/models/enemy.glb
+          file assets/models/*.glb
+      - name: commit generated assets
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/models/*.glb
+          git commit -m 'ci: generate original placeholder GLBs' || exit 0
+          git push origin HEAD:${GITHUB_REF_NAME}
