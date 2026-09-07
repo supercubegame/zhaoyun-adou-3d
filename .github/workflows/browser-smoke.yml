@@ -20,11 +20,15 @@ jobs:
         with:
           node-version: '22'
       - name: install browser runner
-        run: npm install --no-save playwright@1.55.0
+        run: npm install --no-save --package-lock=false playwright@1.55.0
       - name: install chromium
         run: npx playwright install --with-deps chromium
       - name: serve game
-        run: npx --yes http-server . -p 4173 > /tmp/zhaoyun-server.log 2>&1 &
+        run: |
+          python3 -m http.server 4173 > /tmp/zhaoyun-server.log 2>&1 &
+          for i in $(seq 1 20); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && exit 0; sleep 1; done
+          cat /tmp/zhaoyun-server.log
+          exit 1
       - name: run browser assertions
         run: node test/browser-smoke.mjs
       - name: upload screenshot evidence
