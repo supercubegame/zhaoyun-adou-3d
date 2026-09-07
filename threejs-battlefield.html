@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>赵云与阿斗 · 3D 战场预览</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#07131c;color:#f6e8c8;font:16px system-ui,sans-serif}#hud{position:fixed;z-index:2;left:18px;top:14px;pointer-events:none;text-shadow:0 2px 4px #000}#hud h1{margin:0;font-size:clamp(24px,4vw,44px)}#hud p{margin:6px 0;color:#b9c9c0}.badge{display:inline-block;padding:4px 9px;border:1px solid #d1a33b;border-radius:999px;color:#f8d477}.tip{position:fixed;right:18px;bottom:14px;color:#b9c9c0;font-size:13px}canvas{display:block}</style></head>
+<body><div id="hud"><span class="badge">3D 战场预览</span><h1>赵云与阿斗</h1><p>双路线 · 长坂坡 · 正交镜头</p></div><div class="tip">滚轮缩放，拖拽平移 · glTF 资产接口已预留</div>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x07131c); scene.fog=new THREE.Fog(0x07131c,28,70);
+const camera=new THREE.OrthographicCamera(-14,14,9,-9,.1,100); camera.position.set(12,18,14); camera.lookAt(0,0,0);
+const renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; document.body.appendChild(renderer.domElement);
+const controls=new OrbitControls(camera,renderer.domElement); controls.enablePan=true; controls.enableRotate=false; controls.minZoom=.65; controls.maxZoom=1.65; camera.zoom=1; controls.update();
+scene.add(new THREE.HemisphereLight(0xffedc4,0x163b45,2.2)); const sun=new THREE.DirectionalLight(0xffd27e,3); sun.position.set(5,14,6); sun.castShadow=true; scene.add(sun);
+const mat=(color)=>new THREE.MeshStandardMaterial({color,roughness:.86});
+const board=new THREE.Mesh(new THREE.BoxGeometry(24,.35,16),mat(0x214e48)); board.position.y=-.3; board.receiveShadow=true; scene.add(board);
+const tileMat=[mat(0x2d6757),mat(0x346f5a)]; for(let z=-7;z<8;z++){for(let x=-11;x<12;x++){const tile=new THREE.Mesh(new THREE.BoxGeometry(.96,.08,.96),tileMat[(x+z)&1]);tile.position.set(x+.5*(z&1),0,z);tile.receiveShadow=true;scene.add(tile);}}
+function route(z){const path=new THREE.Mesh(new THREE.BoxGeometry(24,.045,2.1),mat(0x97744b));path.position.set(0,.08,z);path.receiveShadow=true;scene.add(path)} route(-4);route(4);
+function rock(x,z){const r=new THREE.Mesh(new THREE.DodecahedronGeometry(1.1,0),mat(0x594b45));r.position.set(x,.9,z);r.scale.y=1.2;r.castShadow=true;scene.add(r)} rock(-2,-4);rock(1.5,4);rock(4,0);
+function unit(x,z,color,scale,label){const g=new THREE.Group();const body=new THREE.Mesh(new THREE.CapsuleGeometry(.35,.75,4,8),mat(color));body.position.y=.75;body.castShadow=true;g.add(body);const ring=new THREE.Mesh(new THREE.TorusGeometry(.54,.04,8,24),mat(0xf3d27a));ring.rotation.x=Math.PI/2;ring.position.y=.05;g.add(ring);g.position.set(x,0,z);g.userData.label=label;scene.add(g);return g} unit(-7,-4,0xd1a33b,1,'赵云'); unit(-8,-4,0x4b82c4,1,'阿斗'); unit(6,-4,0x8d3038,1,'敌');unit(6,4,0x8d3038,1,'敌');
+// Future asset hook: GLTFLoader loads licensed .glb files from assets/models once added.
+window.__gltfLoader = new GLTFLoader();
+addEventListener('resize',()=>{const a=innerWidth/innerHeight;camera.left=-14*a;camera.right=14*a;camera.top=9;camera.bottom=-9;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+function loop(){renderer.render(scene,camera);requestAnimationFrame(loop)} loop();
+</script></body></html>
