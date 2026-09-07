@@ -10,5 +10,10 @@
     {"provider":"Freesound","url":"https://freesound.org/help/faq/","license":"per-item CC0 or CC-BY only; exclude CC-BY-NC","planned_use":"candidate sound effects","status":"planned"},
     {"provider":"Three.js","url":"https://threejs.org/docs/pages/GLTFLoader.html","license":"library documentation","planned_use":"glTF/GLB runtime loading reference","status":"planned"}
   ],
-  "shipped_assets": []
+  "shipped_assets": [],
+  "model_contracts": {
+    "zhaoyun": {"path":"assets/models/zhaoyun.glb","status":"not-shipped","required_clips":["idle","walk","attack","hit","protect","victory","defeat"]},
+    "adou": {"path":"assets/models/adou.glb","status":"not-shipped","required_clips":["idle","follow","scared","rescued","defeat"]},
+    "enemy": {"path":"assets/models/enemy.glb","status":"not-shipped","required_clips":["idle","walk","attack","hit","defeat"]}
+  }
 }
