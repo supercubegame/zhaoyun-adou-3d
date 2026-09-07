@@ -1,34 +1,14 @@
 {
   "policy": "Every shipped external asset must have a source URL, license, download date, and usage note.",
+  "concept_references": [
+    {"role":"zhaoyun","url":"https://u300734028.p.clickup-attachments.com/u300734028/b7c92097-f0a1-4ea8-901e-bff937187f78/generated-image-a72a6cae-499f-4761-80b9-01e2c1b82c0d.png?view=open","type":"original generated concept sheet","status":"reference-only"},
+    {"role":"adou-and-enemy","url":"https://u300734028.p.clickup-attachments.com/u300734028/4495eac3-30cb-4751-b4b3-a6a755771bc4/generated-image-188c0e5d-f4e4-4a59-ad1a-a91488ecf20d.png?view=open","type":"original generated concept sheet","status":"reference-only"}
+  ],
   "planned_sources": [
-    {
-      "provider": "Kenney",
-      "url": "https://kenney.nl/assets",
-      "license": "CC0",
-      "planned_use": "temporary environment, rocks, bridges, foliage, UI prototypes",
-      "status": "planned"
-    },
-    {
-      "provider": "Pixabay",
-      "url": "https://pixabay.com/sound-effects/search/game/",
-      "license": "Pixabay Content License, verify each item before shipping",
-      "planned_use": "candidate battle and UI sound effects",
-      "status": "planned"
-    },
-    {
-      "provider": "Freesound",
-      "url": "https://freesound.org/help/faq/",
-      "license": "per-item CC0 or CC-BY only; exclude CC-BY-NC",
-      "planned_use": "candidate individual sound effects",
-      "status": "planned"
-    },
-    {
-      "provider": "Three.js",
-      "url": "https://threejs.org/docs/pages/GLTFLoader.html",
-      "license": "library documentation",
-      "planned_use": "glTF/GLB runtime loading reference",
-      "status": "planned"
-    }
+    {"provider":"Kenney","url":"https://kenney.nl/assets","license":"CC0","planned_use":"temporary environment and props","status":"planned"},
+    {"provider":"Pixabay","url":"https://pixabay.com/sound-effects/search/game/","license":"Pixabay Content License, verify each item before shipping","planned_use":"candidate sound effects","status":"planned"},
+    {"provider":"Freesound","url":"https://freesound.org/help/faq/","license":"per-item CC0 or CC-BY only; exclude CC-BY-NC","planned_use":"candidate sound effects","status":"planned"},
+    {"provider":"Three.js","url":"https://threejs.org/docs/pages/GLTFLoader.html","license":"library documentation","planned_use":"glTF/GLB runtime loading reference","status":"planned"}
   ],
   "shipped_assets": []
 }
