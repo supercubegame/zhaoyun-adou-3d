@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>赵云和阿斗</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+  <main class="shell">
+    <header><div><p class="eyebrow">长坂坡 · 护送切片</p><h1>赵云和阿斗</h1><p>俯视 3D 试作：护送阿斗穿过敌军路线，到达金色出口。</p></div><button id="reset">重新开始</button></header>
+    <canvas id="game" width="960" height="640" aria-label="赵云和阿斗俯视3D游戏画面"></canvas>
+    <p class="controls">WASD / 方向键移动赵云，R 重开。阿斗会跟随，敌人会追击。</p>
+  </main>
+  <script type="module">
+    import { createGame, step } from './src/game.mjs';
+    import { render } from './src/render.mjs';
+    const canvas = document.querySelector('#game'); const ctx = canvas.getContext('2d');
+    let state = createGame(); const keys = new Set();
+    const map = { w: 'up', a: 'left', s: 'down', d: 'right', ArrowUp: 'up', ArrowLeft: 'left', ArrowDown: 'down', ArrowRight: 'right' };
+    addEventListener('keydown', e => { if (e.key.toLowerCase() === 'r') state = createGame(); keys.add(e.key); });
+    addEventListener('keyup', e => keys.delete(e.key));
+    document.querySelector('#reset').onclick = () => { state = createGame(); };
+    function loop(now) { const input = {}; for (const key of keys) if (map[key]) input[map[key]] = true; state = step(state, input, Math.min(0.05, (loop.last ? now - loop.last : 16.67) / 1000)); loop.last = now; render(ctx, state); requestAnimationFrame(loop); }
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
