@@ -1,0 +1,3 @@
+export const WAVE_TABLE=Object.freeze([{wave:1,count:3,types:['enemy','enemy','enemy']},{wave:2,count:5,types:['enemy','enemy','enemy','shield','enemy']},{wave:3,count:7,types:['enemy','enemy','shield','enemy','archer','enemy','enemy']}]);
+export function spawnWave(wave,laneIds=['north','south']){const spec=WAVE_TABLE.find(item=>item.wave===wave)||WAVE_TABLE.at(-1);return spec.types.map((type,index)=>({id:`wave-${wave}-${index}`,type,lane:laneIds[index%laneIds.length],delay:index*.8,status:'queued'}));}
+export function activateSpawns(spawns,elapsed){return spawns.map(s=>s.status==='queued'&&s.delay<=elapsed?{...s,status:'active'}:s);}
