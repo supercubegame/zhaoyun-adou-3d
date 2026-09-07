@@ -1,0 +1,59 @@
+name: generate-glb
+
+on:
+  push:
+    branches: [ci/generate-procedural-glb]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: generate original placeholder GLBs
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: install Blender
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          sudo apt-get install -y blender
+          blender --version
+      - name: generate GLBs with bounded diagnostics
+        run: |
+          set +e
+          rm -rf assets/models
+          mkdir -p assets/models
+          blender --background --python tools/generate_glb.py > blender-glb.log 2>&1
+          rc=$?
+          cat blender-glb.log
+          echo "BLENDER_EXIT_CODE=$rc" | tee -a blender-glb.log
+          exit $rc
+      - name: collect generated files
+        if: always()
+        run: |
+          set +e
+          find assets/models -maxdepth 1 -type f -printf '%f %s bytes\n' | sort > generated-files.txt
+          cat generated-files.txt
+          file assets/models/* 2>&1 | tee -a generated-files.txt
+          sha256sum assets/models/* 2>&1 | tee -a generated-files.txt
+          exit 0
+      - name: upload Blender diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glb-generation-diagnostics
+          path: |
+            blender-glb.log
+            generated-files.txt
+            assets/models/*
+          if-no-files-found: error
+          retention-days: 14
+      - name: require all GLB outputs
+        run: |
+          set -euxo pipefail
+          test -s assets/models/zhaoyun.glb
+          test -s assets/models/adou.glb
+          test -s assets/models/enemy.glb
