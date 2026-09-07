@@ -1,0 +1,24 @@
+{
+  "title": "赵云和阿斗",
+  "genre": "top-down 3D escort action",
+  "platform": "browser",
+  "first_playable_slice": {
+    "player": "赵云",
+    "protected_character": "阿斗",
+    "objective": "护送阿斗穿过一段敌军路线到达出口",
+    "camera": "俯视 3D",
+    "win_condition": "阿斗抵达出口且生命值大于 0",
+    "lose_condition": "阿斗生命值归零"
+  },
+  "machine_proof": [
+    "npm run verify",
+    "deterministic game contract is valid",
+    "no secrets are present"
+  ],
+  "human_acceptance": [
+    "camera and scene read clearly",
+    "keyboard controls feel usable",
+    "mobile touch feel is not machine-confirmed",
+    "audio audibility is not machine-confirmed"
+  ]
+}
