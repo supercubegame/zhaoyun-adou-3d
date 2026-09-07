@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="zh-CN">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>赵云和阿斗</title><link rel="stylesheet" href="styles.css"></head>
-<body><main class="shell"><header><div><p class="eyebrow">长坂坡 · 护送切片</p><h1>赵云和阿斗</h1><p>护送阿斗穿过乱石与敌军路线，到达金色出口。</p></div><div class="actions"><button id="sound" aria-pressed="false">声音：开</button><button id="music" aria-pressed="false">背景音乐：开</button><button id="reset">重新开始</button></div></header>
+<body><main class="shell"><header><div><p class="eyebrow">长坂坡 · 护送切片</p><h1>赵云和阿斗</h1><p>护送阿斗穿过乱石与敌军路线，到达金色出口。</p></div><div class="actions"><button id="sound" aria-pressed="false">声音：开</button><button id="music" aria-pressed="false">背景音乐：点击播放</button><button id="reset">重新开始</button></div></header>
 <canvas id="game" width="960" height="640" aria-label="赵云和阿斗俯视3D游戏画面"></canvas>
 <section class="pad" aria-label="触控操作"><button data-key="up">▲</button><div><button data-key="left">◀</button><button data-key="attack">斩</button><button data-key="right">▶</button></div><button data-key="down">▼</button></section>
-<p class="controls">WASD / 方向键移动，空格攻击，R 重开。移动键采用按键代码，浏览器不会抢方向键滚动。点击背景音乐即可听到循环旋律。</p></main>
+<p class="controls">WASD / 方向键移动，空格攻击，R 重开。手机可用下方触控盘。点击“背景音乐”后会立即播放旋律。</p></main>
 <script type="module">
 import { createGame, step } from './src/game.mjs'; import { render } from './src/render.mjs'; import { isMuted, playHit, playLose, playSlash, playWin, setMuted, startMusic, stopMusic } from './src/audio.mjs';
 const canvas=document.querySelector('#game'),ctx=canvas.getContext('2d'); let state=createGame(); const actions=new Set(); let lastStatus=state.status;
@@ -12,7 +12,7 @@ const map={KeyW:'up',KeyA:'left',KeyS:'down',KeyD:'right',ArrowUp:'up',ArrowLeft
 addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();if(e.code==='KeyR')state=createGame();const action=map[e.code];if(action)actions.add(action);}); addEventListener('keyup',e=>{const action=map[e.code];if(action)actions.delete(action);}); addEventListener('blur',()=>actions.clear());
 document.querySelector('#reset').onclick=()=>{state=createGame();lastStatus=state.status;};
 const sound=document.querySelector('#sound'); sound.onclick=()=>{const muted=setMuted(!isMuted());sound.textContent=muted?'声音：关':'声音：开';sound.setAttribute('aria-pressed',String(muted));};
-const music=document.querySelector('#music'); music.onclick=()=>{const off=music.getAttribute('aria-pressed')==='true';if(off){music.setAttribute('aria-pressed','false');music.textContent='背景音乐：开';startMusic();}else{music.setAttribute('aria-pressed','true');music.textContent='背景音乐：关';stopMusic();}};
+const music=document.querySelector('#music'); music.onclick=()=>{const off=music.getAttribute('aria-pressed')==='true';if(off){music.setAttribute('aria-pressed','false');music.textContent='背景音乐：点击播放';startMusic();}else{music.setAttribute('aria-pressed','true');music.textContent='背景音乐：关';stopMusic();}};
 document.querySelectorAll('[data-key]').forEach(b=>{const action=b.dataset.key;b.onpointerdown=e=>{e.preventDefault();actions.add(action);if(action==='attack')startMusic();};b.onpointerup=b.onpointercancel=b.onpointerleave=()=>actions.delete(action);});
 function loop(now){const before=state;state=step(state,Object.fromEntries([...actions].map(a=>[a,true])),Math.min(.05,(loop.last?now-loop.last:16.67)/1000));if(actions.has('attack')&&state.slash>0&&before.slash<=0){startMusic();playSlash();}if(state.enemies.length<before.enemies.length)playHit();if(state.status!==lastStatus){state.status==='won'?playWin():state.status==='lost'&&playLose();lastStatus=state.status;}loop.last=now;render(ctx,state);requestAnimationFrame(loop)}requestAnimationFrame(loop);
 </script></body></html>

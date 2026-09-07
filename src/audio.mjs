@@ -23,8 +23,11 @@ export function setMuted(value) { muted = value; if (muted) stopMusic(); return 
 export function isMuted() { return muted; }
 export function startMusic() {
   if (muted || musicTimer) return;
-  ensureAudio();
-  musicTimer = setInterval(() => { if (!muted) { tone(melody[musicStep % melody.length], 0.28, 'triangle', 0.018); musicStep += 1; } }, 360);
+  const ctx = ensureAudio();
+  tone(130.81, 0.32, 'sine', 0.045, ctx.currentTime);
+  tone(melody[musicStep % melody.length], 0.3, 'triangle', 0.045, ctx.currentTime + 0.02);
+  musicStep += 1;
+  musicTimer = setInterval(() => { if (!muted) { tone(130.81, 0.32, 'sine', 0.025); tone(melody[musicStep % melody.length], 0.3, 'triangle', 0.045); musicStep += 1; } }, 360);
 }
 export function stopMusic() { if (musicTimer) { clearInterval(musicTimer); musicTimer = null; } }
 export function playSlash() { tone(180, 0.09, 'sawtooth', 0.025); tone(420, 0.06, 'triangle', 0.018); }
